@@ -1,14 +1,24 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet } from 'react-native';
+import { AuthProvider, useAuth } from './app/store/AuthStore';
+import AppStackNavigator from './app/stack/AppStack';
+import AuthStackNavigator from './app/stack/AuthStack';
+import { NavigationContainer } from '@react-navigation/native';
+
+const MainNavigator = () => {
+  const { isLogin } = useAuth();
+
+  return isLogin ? <AppStackNavigator /> : <AuthStackNavigator />;
+};
 
 export default function App() {
   return (
-    <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
+    <AuthProvider>
+      <NavigationContainer>
+        <MainNavigator />
+      </NavigationContainer>
+    </AuthProvider>
   );
-}
+} 
 
 const styles = StyleSheet.create({
   container: {
