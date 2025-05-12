@@ -1,3 +1,4 @@
+import { useState } from "react";
 import {
   View,
   Text,
@@ -6,8 +7,45 @@ import {
   SafeAreaView,
   TouchableOpacity,
 } from "react-native";
+import { loginApi } from "../../api/auth";
+import { useNavigation } from "@react-navigation/native";
+import { useAuth } from "../../store/AuthStore";
+
 
 const LoginScreen = () => {
+  const [phoneNumber, setPhoneNumber] = useState("");
+  const [password, setPassword] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+  // const navigation = useNavigation();
+  const { loginDispatch } = useAuth();
+
+  const login = async () => {
+    if (phoneNumber === "" || password === "") {
+      alert("Vui lòng nhập số điện thoại và mật khẩu");
+      return;
+    }
+
+    try {
+      setIsLoading(true);
+      const response = await loginApi(phoneNumber, password);
+      if (response?.success) {
+        setTimeout(async() => {
+          setIsLoading(false);
+          await loginDispatch(response.data.data);
+        }, 2000);
+        // navigation.navigate("Home");
+      } else {
+        setIsLoading(false);
+        // Handle login failure
+        alert("Đăng nhập thất bại. Vui lòng kiểm tra lại thông tin.");
+      }
+    } catch (error) {
+      console.error(error);
+      alert("Đã xảy ra lỗi. Vui lòng thử lại sau.");
+      setIsLoading(false);
+    }
+  };
+
   return (
     <SafeAreaView
       style={{
@@ -67,6 +105,8 @@ const LoginScreen = () => {
               borderRadius: 8,
               paddingHorizontal: 10,
             }}
+            value={phoneNumber}
+            onChangeText={(text) => setPhoneNumber(text)}
           />
         </View>
 
@@ -96,6 +136,9 @@ const LoginScreen = () => {
               borderRadius: 8,
               paddingHorizontal: 10,
             }}
+            value={password}
+            onChangeText={(text) => setPassword(text)}
+            secureTextEntry={true}
           />
         </View>
 
@@ -121,7 +164,7 @@ const LoginScreen = () => {
 
         <TouchableOpacity
           style={{
-            backgroundColor: "#003b95",
+            backgroundColor: isLoading ? "#9C9C9C" : "#003b95",
             width: "100%",
             height: 40,
             borderRadius: 8,
@@ -129,9 +172,8 @@ const LoginScreen = () => {
             alignItems: "center",
             marginVertical: 20,
           }}
-          onPress={() => {
-            // Handle login action
-          }}
+          onPress={login}
+          disabled={isLoading}
         >
           <Text
             style={{
@@ -139,7 +181,7 @@ const LoginScreen = () => {
               color: "#fff",
             }}
           >
-            Đăng nhập
+            {isLoading ? '...Đang xác thực' : 'Đăng nhập'}
           </Text>
         </TouchableOpacity>
       </View>
