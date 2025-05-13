@@ -3,13 +3,45 @@ import {
   Text,
   SafeAreaView,
   StatusBar,
-  FlatList,
+  SectionList,
   TouchableOpacity,
 } from "react-native";
 import { useAuth } from "../../store/AuthStore";
 import { useEffect, useState } from "react";
 import { getTasksByStaff, putChangeStatusTask } from "../../api/task";
 import Ionicons from "react-native-vector-icons/Ionicons";
+import moment from "moment";
+
+const mockData = [
+  {
+    id: 1,
+    roomName: "Phòng 101",
+    assignedDate: [2025, 5, 10],
+    notes: "Dọn phòng + thay khăn",
+    status: 0,
+  },
+  {
+    id: 2,
+    roomName: "Phòng 102",
+    assignedDate: [2025, 5, 10],
+    notes: "Vệ sinh toilet",
+    status: 0,
+  },
+  {
+    id: 4,
+    roomName: "Phòng 104",
+    assignedDate: [2025, 5, 13],
+    notes: "Check mini bar",
+    status: 0,
+  },
+  {
+    id: 3,
+    roomName: "Phòng 103",
+    assignedDate: [2025, 5, 11],
+    notes: "Bổ sung nước suối",
+    status: 0,
+  },
+];
 
 const TasksList = () => {
   const { userInfo } = useAuth();
@@ -19,7 +51,12 @@ const TasksList = () => {
     const res = await getTasksByStaff(userInfo?.staffId);
     if (res?.success) {
       const filteredTasks = res.data.data.filter((task) => task.status === 0);
-      setTasks(filteredTasks);
+      // const filteredTasks = mockData.filter((task) => task.status === 0);
+      const sortedTasks = filteredTasks.sort((a, b) =>
+        moment(b.assignedDate).diff(moment(a.assignedDate))
+      );
+      setTasks(sortedTasks);
+      // console.log("sortedTasks", sortedTasks);
     } else {
       console.log("Error: ", res?.message);
     }
@@ -27,9 +64,7 @@ const TasksList = () => {
 
   const handleCheck = async (taskId) => {
     const res = await putChangeStatusTask(taskId, 1);
-    console.log("dadada");
     if (res?.success) {
-      // Xoá task đó khỏi danh sách vì chỉ hiển thị task status = 0
       setTasks((prev) => prev.filter((task) => task.id !== taskId));
       alert("Xác nhận hoàn thành công việc");
     } else {
@@ -49,6 +84,19 @@ const TasksList = () => {
     return `${dd}/${mm}/${year}`;
   };
 
+  const groupTasksByDate = (tasks) => {
+    const grouped = tasks.reduce((acc, task) => {
+      const dateKey = formatDate(task.assignedDate);
+      if (!acc[dateKey]) acc[dateKey] = [];
+      acc[dateKey].push(task);
+      return acc;
+    }, {});
+    return Object.keys(grouped).map((date) => ({
+      title: date,
+      data: grouped[date],
+    }));
+  };
+
   const renderItem = ({ item, index }) => (
     <View
       style={{
@@ -64,17 +112,14 @@ const TasksList = () => {
       </Text>
 
       <TouchableOpacity
-        onPress={() => {
-          console.log("Checkbox tapped for task", item.id);
-          handleCheck(item.id);
-        }}
+        onPress={() => handleCheck(item.id)}
         style={{ paddingHorizontal: 10 }}
       >
         <Ionicons name="square-outline" size={24} color="#003b95" />
       </TouchableOpacity>
 
       <View>
-        <Text style={{ marginLeft: 10, fontSize: 16, fontWeight: 700 }}>
+        <Text style={{ marginLeft: 10, fontSize: 16, fontWeight: "700" }}>
           {item.roomName}
         </Text>
         <Text style={{ marginLeft: 10, fontSize: 14 }}>
@@ -106,10 +151,22 @@ const TasksList = () => {
         Danh sách công việc của bạn là
       </Text>
 
-      <FlatList
-        data={tasks}
+      <SectionList
+        sections={groupTasksByDate(tasks)}
         keyExtractor={(item) => item.id.toString()}
         renderItem={renderItem}
+        renderSectionHeader={({ section: { title } }) => (
+          <Text
+            style={{
+              fontSize: 18,
+              fontWeight: "bold",
+              marginVertical: 10,
+              color: "#444",
+            }}
+          >
+            {title}
+          </Text>
+        )}
         ListEmptyComponent={
           <Text style={{ textAlign: "center", marginTop: 50, fontSize: 16 }}>
             Bạn không có công việc nào
