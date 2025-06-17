@@ -12,7 +12,7 @@ import { useNavigation } from "@react-navigation/native";
 
 const HomeScreen = () => {
   const { userInfo, logoutDispatch } = useAuth();
-  const navigation = useNavigation();
+  const navigation = useNavigation();                                                                                                                                                                                                                                                                                                                           
   console.log("userInfo", userInfo);
 
   return (
@@ -44,7 +44,7 @@ const HomeScreen = () => {
         Chào mừng bạn đến với ứng dụng quản lý công việc
       </Text>
 
-      {userInfo?.department == "Dọn dẹp" && (
+      {/* {userInfo?.department == "Dọn dẹp" && ( */}
         <TouchableOpacity
           style={{
             backgroundColor: "#003b95",
@@ -67,34 +67,31 @@ const HomeScreen = () => {
             Danh sách công việc tồn tại
           </Text>
         </TouchableOpacity>
-      )}
+      {/* )} */}
 
-      {userInfo?.department == "Kiểm định" && (
-        <TouchableOpacity
+      <TouchableOpacity
+        style={{
+          backgroundColor: "#003b95",
+          paddingVertical: 20,
+          paddingHorizontal: 10,
+          borderRadius: 8,
+          marginTop: 20,
+        }}
+        onPress={() => {
+          navigation.navigate("TaskListSuccess");
+        }}
+      >
+        <Text
           style={{
-            backgroundColor: "#003b95",
-            paddingVertical: 20,
-            paddingHorizontal: 10,
-            borderRadius: 8,
-            marginTop: 20,
-          }}
-          onPress={() => {
-            navigation.navigate("TasksList");
+            color: "#fff",
+            fontSize: 16,
+            fontWeight: "bold",
           }}
         >
-          <Text
-            style={{
-              color: "#fff",
-              fontSize: 16,
-              fontWeight: "bold",
-            }}
-          >
-            Kiểm tra hoàn thành công việc
-          </Text>
-        </TouchableOpacity>
-      )}
+          {userInfo?.department == "Kiểm định" ? 'Danh sách công việc đã kiểm tra' : "Danh sách công việc chờ kiểm tra"}
+        </Text>
+      </TouchableOpacity>
 
-      {userInfo?.department == "Dọn dẹp" && (
         <TouchableOpacity
           style={{
             backgroundColor: "#003b95",
@@ -104,32 +101,7 @@ const HomeScreen = () => {
             marginTop: 20,
           }}
           onPress={() => {
-            navigation.navigate("TaskListSuccess");
-          }}
-        >
-          <Text
-            style={{
-              color: "#fff",
-              fontSize: 16,
-              fontWeight: "bold",
-            }}
-          >
-            Danh sách công việc đã hoàn thành
-          </Text>
-        </TouchableOpacity>
-      )}
-
-      {userInfo?.department == "Dọn dẹp" && (
-        <TouchableOpacity
-          style={{
-            backgroundColor: "#003b95",
-            paddingVertical: 20,
-            paddingHorizontal: 10,
-            borderRadius: 8,
-            marginTop: 20,
-          }}
-          onPress={() => {
-            navigation.navigate("TaskListSuccess");
+            navigation.navigate("TaskListAgain");
           }}
         >
           <Text
@@ -142,7 +114,6 @@ const HomeScreen = () => {
             Danh sách công việc phải làm lại
           </Text>
         </TouchableOpacity>
-      )}
 
       <TouchableOpacity
         style={{
@@ -153,7 +124,7 @@ const HomeScreen = () => {
           marginTop: 20,
         }}
         onPress={() => {
-          // Handle button press
+          navigation.navigate("WorkCalendar");
         }}
       >
         <Text

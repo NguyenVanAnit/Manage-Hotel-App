@@ -11,7 +11,7 @@ import { useEffect, useState } from "react";
 import { getTasksByStaff, putChangeStatusTask } from "../../api/task";
 import Ionicons from "react-native-vector-icons/Ionicons";
 
-const TasksListSuccess = () => {
+const TaskListAgain = () => {
   const { userInfo } = useAuth();
   const [tasks, setTasks] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -20,15 +20,8 @@ const TasksListSuccess = () => {
     const res = await getTasksByStaff(userInfo?.staffId);
     console.log("res", res.data);
     if (res?.success) {
-      if (userInfo?.department == "Kiểm định") {
-        const filteredTasks = res.data.data.filter(
-          (task) => task.status === 3
-        );
-        setTasks(filteredTasks);
-      } else {
-        const filteredTasks = res.data.data.filter((task) => task.status === 1);
-        setTasks(filteredTasks);
-      }
+      const filteredTasks = res.data.data.filter((task) => task.status === 4);
+      setTasks(filteredTasks);
     } else {
       console.log("Error: ", res?.message);
     }
@@ -36,12 +29,12 @@ const TasksListSuccess = () => {
   };
 
   const handleCheck = async (taskId) => {
-    const res = await putChangeStatusTask(taskId, 0);
+    const res = await putChangeStatusTask(taskId, 1);
     console.log("dadada");
     if (res?.success) {
       // Xoá task đó khỏi danh sách vì chỉ hiển thị task status = 0
       setTasks((prev) => prev.filter((task) => task.id !== taskId));
-      alert("Xác nhận làm lại công việc");
+      alert("Xác nhận đã làm lại xong công việc");
     } else {
       console.log("Cập nhật thất bại");
     }
@@ -82,7 +75,7 @@ const TasksListSuccess = () => {
         }}
         style={{ paddingHorizontal: 10 }}
       >
-        <Ionicons name="checkbox" size={24} color="#28a745" />
+        <Ionicons name="close-circle" size={24} color="red" />
       </TouchableOpacity>
 
       <View>
@@ -116,7 +109,7 @@ const TasksListSuccess = () => {
             color: "#003b95",
           }}
         >
-          Danh sách công việc đã hoàn thành của bạn là
+          Danh sách công việc làm lại là
         </Text>
         <Text>Loading...</Text>
       </SafeAreaView>
@@ -139,7 +132,7 @@ const TasksListSuccess = () => {
           color: "#003b95",
         }}
       >
-        Danh sách công việc đã hoàn thành của bạn là
+        Danh sách công việc làm lại là
       </Text>
 
       <FlatList
@@ -156,4 +149,4 @@ const TasksListSuccess = () => {
   );
 };
 
-export default TasksListSuccess;
+export default TaskListAgain;

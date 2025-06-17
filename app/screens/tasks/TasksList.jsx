@@ -46,24 +46,40 @@ const mockData = [
 const TasksList = () => {
   const { userInfo } = useAuth();
   const [tasks, setTasks] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   const fetchData = async () => {
     const res = await getTasksByStaff(userInfo?.staffId);
+    console.log("res", res.data); 
     if (res?.success) {
-      const filteredTasks = res.data.data.filter((task) => task.status === 0);
-      // const filteredTasks = mockData.filter((task) => task.status === 0);
-      const sortedTasks = filteredTasks.sort((a, b) =>
-        moment(b.assignedDate).diff(moment(a.assignedDate))
-      );
-      setTasks(sortedTasks);
+      if (userInfo?.department == "Kiểm định") {
+        const filteredTasks = res.data.data.filter(
+          (task) => task.status === 1
+        );
+        // const filteredTasks = mockData.filter(
+        //   (task) => task.status === 1 || task.status === 2
+        // );
+        const sortedTasks = filteredTasks.sort((a, b) =>
+          moment(b.assignedDate).diff(moment(a.assignedDate))
+        );
+        setTasks(sortedTasks);
+      } else {
+        const filteredTasks = res.data.data.filter((task) => task.status === 0);
+        // const filteredTasks = mockData.filter((task) => task.status === 0);
+        const sortedTasks = filteredTasks.sort((a, b) =>
+          moment(b.assignedDate).diff(moment(a.assignedDate))
+        );
+        setTasks(sortedTasks);
+      }
       // console.log("sortedTasks", sortedTasks);
     } else {
       console.log("Error: ", res?.message);
     }
+    setLoading(false);
   };
 
-  const handleCheck = async (taskId) => {
-    const res = await putChangeStatusTask(taskId, 1);
+  const handleCheck = async (taskId, type) => {
+    const res = await putChangeStatusTask(taskId, type);
     if (res?.success) {
       setTasks((prev) => prev.filter((task) => task.id !== taskId));
       alert("Xác nhận hoàn thành công việc");
@@ -112,7 +128,7 @@ const TasksList = () => {
       </Text>
 
       <TouchableOpacity
-        onPress={() => handleCheck(item.id)}
+        onPress={() => handleCheck(item.id, userInfo?.department === "Kiểm định" ? 3 : 1)}
         style={{ paddingHorizontal: 10 }}
       >
         <Ionicons name="square-outline" size={24} color="#003b95" />
@@ -129,8 +145,43 @@ const TasksList = () => {
           Ghi chú: {item.notes}
         </Text>
       </View>
+
+      {userInfo?.department == "Kiểm định" ?? (
+        <TouchableOpacity
+          onPress={() => handleCheck(item.id, 4)}
+          style={{ paddingHorizontal: 10 }}
+        >
+          <Text style={{ color: "#003b95", fontSize: 16, marginLeft: 20 }}>
+            Làm lại
+          </Text>
+        </TouchableOpacity>
+      )}
     </View>
   );
+
+  if (loading) {
+    return (
+      <SafeAreaView
+        style={{
+          flex: 1,
+          padding: 20,
+          marginTop: StatusBar.currentHeight,
+        }}
+      >
+        <Text
+        style={{
+          fontSize: 24,
+          fontWeight: "bold",
+          marginBottom: 20,
+          color: "#003b95",
+        }}
+      >
+        Danh sách công việc của bạn là
+      </Text>
+        <Text>Loading...</Text>
+      </SafeAreaView>
+    );
+  }
 
   return (
     <SafeAreaView

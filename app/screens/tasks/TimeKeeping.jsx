@@ -4,9 +4,9 @@ import { Calendar } from "react-native-calendars";
 import moment from "moment";
 
 // Những ngày đã chấm công
-const checkedInDays = ["2025-05-04",
-    "2025-05-05", "2025-05-06", "2025-05-07", "2025-05-08",
-    "2025-05-09", "2025-05-10", "2025-05-11", "2025-05-12", "2025-05-13",];
+const checkedInDays = ["2025-06-04",
+    "2025-06-06", "2025-06-07", "2025-06-08",
+    "2025-06-09", "2025-06-10", "2025-06-11", "2025-06-12", "2025-06-13",];
 
 // Hàm tạo mảng full ngày trong tháng
 const generateMonthDays = (year, month) => {
@@ -27,7 +27,7 @@ const generateMonthDays = (year, month) => {
 
 const WorkCalendar = () => {
   const year = 2025;
-  const month = 5; // Tháng 5
+  const month = 6; // Tháng 5
 
   const allDaysInMonth = generateMonthDays(year, month);
 
@@ -67,7 +67,7 @@ const WorkCalendar = () => {
       <View style={{ flexDirection: "row", alignItems: "center", justifyContent: "center", gap: 20, marginTop: 10 }}>
         <View style={{ flexDirection: "row", alignItems: "center", marginTop: 10 }}>
             <View style={{ width: 5, height: 5, borderRadius: "50%", backgroundColor: "#00cc66" }}/>
-            <Text style={{ marginLeft: 10 }}>Đã chấm công</Text>
+            <Text style={{ marginLeft: 10 }}>Đã chấm công: {checkedInDays.length}</Text>
         </View>
 
         <View style={{ flexDirection: "row", alignItems: "center", marginTop: 10 }}>
