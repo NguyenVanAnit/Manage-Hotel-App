@@ -52,25 +52,25 @@ const TasksList = () => {
     const res = await getTasksByStaff(userInfo?.staffId);
     console.log("res", res.data); 
     if (res?.success) {
-      if (userInfo?.department == "Kiểm định") {
-        const filteredTasks = res.data.data.filter(
-          (task) => task.status === 1
-        );
-        // const filteredTasks = mockData.filter(
-        //   (task) => task.status === 1 || task.status === 2
-        // );
-        const sortedTasks = filteredTasks.sort((a, b) =>
-          moment(b.assignedDate).diff(moment(a.assignedDate))
-        );
-        setTasks(sortedTasks);
-      } else {
+      // if (userInfo?.department == "Kiểm định") {
+      //   const filteredTasks = res.data.data.filter(
+      //     (task) => task.status === 1
+      //   );
+      //   // const filteredTasks = mockData.filter(
+      //   //   (task) => task.status === 1 || task.status === 2
+      //   // );
+      //   const sortedTasks = filteredTasks.sort((a, b) =>
+      //     moment(b.assignedDate).diff(moment(a.assignedDate))
+      //   );
+      //   setTasks(sortedTasks);
+      // } else {
         const filteredTasks = res.data.data.filter((task) => task.status === 0);
         // const filteredTasks = mockData.filter((task) => task.status === 0);
         const sortedTasks = filteredTasks.sort((a, b) =>
           moment(b.assignedDate).diff(moment(a.assignedDate))
         );
         setTasks(sortedTasks);
-      }
+      // }
       // console.log("sortedTasks", sortedTasks);
     } else {
       console.log("Error: ", res?.message);
@@ -128,7 +128,7 @@ const TasksList = () => {
       </Text>
 
       <TouchableOpacity
-        onPress={() => handleCheck(item.id, userInfo?.department === "Kiểm định" ? 3 : 1)}
+        onPress={() => handleCheck(item.id, 1)}
         style={{ paddingHorizontal: 10 }}
       >
         <Ionicons name="square-outline" size={24} color="#003b95" />

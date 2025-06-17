@@ -92,7 +92,7 @@ const HomeScreen = () => {
         </Text>
       </TouchableOpacity>
 
-        <TouchableOpacity
+        {/* <TouchableOpacity
           style={{
             backgroundColor: "#003b95",
             paddingVertical: 20,
@@ -113,7 +113,7 @@ const HomeScreen = () => {
           >
             Danh sách công việc phải làm lại
           </Text>
-        </TouchableOpacity>
+        </TouchableOpacity> */}
 
       <TouchableOpacity
         style={{

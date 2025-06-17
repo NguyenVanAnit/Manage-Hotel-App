@@ -20,15 +20,15 @@ const TasksListSuccess = () => {
     const res = await getTasksByStaff(userInfo?.staffId);
     console.log("res", res.data);
     if (res?.success) {
-      if (userInfo?.department == "Kiểm định") {
-        const filteredTasks = res.data.data.filter(
-          (task) => task.status === 3
-        );
-        setTasks(filteredTasks);
-      } else {
+      // if (userInfo?.department == "Kiểm định") {
+      //   const filteredTasks = res.data.data.filter(
+      //     (task) => task.status === 3
+      //   );
+      //   setTasks(filteredTasks);
+      // } else {
         const filteredTasks = res.data.data.filter((task) => task.status === 1);
         setTasks(filteredTasks);
-      }
+      // }
     } else {
       console.log("Error: ", res?.message);
     }
@@ -75,10 +75,10 @@ const TasksListSuccess = () => {
 
       <TouchableOpacity
         onPress={() => {
-          if (userInfo?.department == "Dọn dẹp") {
+          // if (userInfo?.department == "Dọn dẹp") {
             console.log("Checkbox tapped for task", item.id);
             handleCheck(item.id);
-          }
+          // }
         }}
         style={{ paddingHorizontal: 10 }}
       >
