@@ -56,7 +56,7 @@ const TasksList = () => {
         moment(b.assignedDate).diff(moment(a.assignedDate))
       );
       setTasks(sortedTasks);
-      // console.log("sortedTasks", sortedTasks);
+      console.log("sortedTasks", sortedTasks);
     } else {
       console.log("Error: ", res?.message);
     }
@@ -64,6 +64,7 @@ const TasksList = () => {
 
   const handleCheck = async (taskId) => {
     const res = await putChangeStatusTask(taskId, 1);
+    console.log('res task list', res);
     if (res?.success) {
       setTasks((prev) => prev.filter((task) => task.id !== taskId));
       alert("Xác nhận hoàn thành công việc");

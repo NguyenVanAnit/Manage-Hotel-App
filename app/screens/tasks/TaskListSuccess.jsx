@@ -17,6 +17,7 @@ const TasksListSuccess = () => {
 
   const fetchData = async () => {
     const res = await getTasksByStaff(userInfo?.staffId);
+    console.log("res task list", res);
     if (res?.success) {
       const filteredTasks = res.data.data.filter((task) => task.status === 1);
       setTasks(filteredTasks);
@@ -50,41 +51,42 @@ const TasksListSuccess = () => {
   };
 
   const renderItem = ({ item, index }) => (
-  <View
-    style={{
-      flexDirection: "row",
-      alignItems: "center",
-      paddingVertical: 10,
-      borderBottomWidth: 1,
-      borderColor: "#ddd",
-    }}
-  >
-    <Text style={{ width: 24, fontWeight: "bold", fontSize: 16 }}>{index + 1}.</Text>
-    
-    <TouchableOpacity
-      onPress={() => {
-        console.log("Checkbox tapped for task", item.id);
-        handleCheck(item.id);
+    <View
+      style={{
+        flexDirection: "row",
+        alignItems: "center",
+        paddingVertical: 10,
+        borderBottomWidth: 1,
+        borderColor: "#ddd",
       }}
-      style={{ paddingHorizontal: 10 }}
     >
-      <Ionicons name="checkbox" size={24} color="#28a745" />
-    </TouchableOpacity>
+      <Text style={{ width: 24, fontWeight: "bold", fontSize: 16 }}>
+        {index + 1}.
+      </Text>
 
-    <View>
-      <Text style={{ marginLeft: 10, fontSize: 16, fontWeight: 700 }}>
-        {item.roomName}
-      </Text>
-      <Text style={{ marginLeft: 10, fontSize: 14 }}>
-        {formatDate(item.assignedDate)}
-      </Text>
-      <Text style={{ marginLeft: 10, fontSize: 14 }}>
-        Ghi chú: {item.notes}
-      </Text>
+      <TouchableOpacity
+        onPress={() => {
+          console.log("Checkbox tapped for task", item.id);
+          handleCheck(item.id);
+        }}
+        style={{ paddingHorizontal: 10 }}
+      >
+        <Ionicons name="checkbox" size={24} color="#28a745" />
+      </TouchableOpacity>
+
+      <View>
+        <Text style={{ marginLeft: 10, fontSize: 16, fontWeight: 700 }}>
+          {item.roomName}
+        </Text>
+        <Text style={{ marginLeft: 10, fontSize: 14 }}>
+          {formatDate(item.assignedDate)}
+        </Text>
+        <Text style={{ marginLeft: 10, fontSize: 14 }}>
+          Ghi chú: {item.notes}
+        </Text>
+      </View>
     </View>
-  </View>
-);
-
+  );
 
   return (
     <SafeAreaView
@@ -109,6 +111,11 @@ const TasksListSuccess = () => {
         data={tasks}
         keyExtractor={(item) => item.id.toString()}
         renderItem={renderItem}
+        ListEmptyComponent={
+          <Text style={{ textAlign: "center", marginTop: 50, fontSize: 16 }}>
+            Bạn không có công việc nào
+          </Text>
+        }
       />
     </SafeAreaView>
   );

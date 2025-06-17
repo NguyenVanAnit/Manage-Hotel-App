@@ -44,7 +44,7 @@ const HomeScreen = () => {
         Chào mừng bạn đến với ứng dụng quản lý công việc
       </Text>
 
-      {userInfo?.department == "Dọn dẹp" && (
+      {/* {userInfo?.department == "Dọn dẹp" && ( */}
         <TouchableOpacity
           style={{
             backgroundColor: "#003b95",
@@ -67,7 +67,7 @@ const HomeScreen = () => {
             Danh sách công việc tồn tại
           </Text>
         </TouchableOpacity>
-      )}
+      {/* )} */}
 
       {userInfo?.department == "Kiểm định" && (
         <TouchableOpacity
@@ -94,7 +94,7 @@ const HomeScreen = () => {
         </TouchableOpacity>
       )}
 
-      {userInfo?.department == "Dọn dẹp" && (
+      {/* {userInfo?.department == "Dọn dẹp" && ( */}
         <TouchableOpacity
           style={{
             backgroundColor: "#003b95",
@@ -117,9 +117,9 @@ const HomeScreen = () => {
             Danh sách công việc đã hoàn thành
           </Text>
         </TouchableOpacity>
-      )}
+      {/* )} */}
 
-      {userInfo?.department == "Dọn dẹp" && (
+      {/* {userInfo?.department == "Dọn dẹp" && ( */}
         <TouchableOpacity
           style={{
             backgroundColor: "#003b95",
@@ -142,7 +142,7 @@ const HomeScreen = () => {
             Danh sách công việc phải làm lại
           </Text>
         </TouchableOpacity>
-      )}
+      {/* )} */}
 
       <TouchableOpacity
         style={{
