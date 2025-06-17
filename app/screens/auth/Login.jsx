@@ -28,6 +28,7 @@ const LoginScreen = () => {
     try {
       setIsLoading(true);
       const response = await loginApi(phoneNumber, password);
+      console.log('res', response);
       if (response?.success) {
         setTimeout(async() => {
           setIsLoading(false);
@@ -41,7 +42,7 @@ const LoginScreen = () => {
       }
     } catch (error) {
       console.error(error);
-      alert("Đã xảy ra lỗi. Vui lòng thử lại sau.");
+      alert("Số điện thoại hoặc mật khẩu không đúng. Vui lòng thử lại.");
       setIsLoading(false);
     }
   };
